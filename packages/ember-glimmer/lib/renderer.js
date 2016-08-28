@@ -140,6 +140,8 @@ class Renderer {
     view.trigger('willDestroyElement');
     view.trigger('willClearRender');
     view._transitionTo('destroying');
+    view.element = null;               // FIXME: test this in lifecycle tests
+    view.trigger('didDestroyElement'); // FIXME: test this in lifecycle tests
 
     if (this._root === view) {
       this._clearRoot();
@@ -166,6 +168,10 @@ class Renderer {
     let lastNode = bounds.lastNode();
 
     return { parentElement, firstNode, lastNode };
+  }
+
+  createElement(tagName) {
+    return this._env.getAppendOperations().createElement(tagName, document.body /* FIXME: contextualElement, what is it? */);
   }
 
   _renderRoot(root, template, self, parentElement, dynamicScope) {
